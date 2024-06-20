@@ -56,8 +56,8 @@ def parseTableDetails(base_url,path,table):
         # Grab the first two td elements within the row, create a dict, and append that dict to table_dict array
         for row in rows[1:]:
             if not(row.text.strip().startswith('_') or row.text.strip().startswith('TenantId')):
-                cells = row.find_all('td')[:-1]
-                dict_entry = {'name': cells[0].text, 'type': cells[1].text}
+                cells = row.find_all('td')
+                dict_entry = {'name': cells[0].text, 'type': cells[1].text, 'description': cells[2].text}
                 table_dict.append(dict_entry)
             
         return table_dict
@@ -68,16 +68,45 @@ def parseTableDetails(base_url,path,table):
 # Function to generate JSON schema format
 def generateJSONSchema(tableDetails, tableName):
     jsonSchema = {}
+    jsonSchema["$id"] = "https://example.com/" + tableName + ".schema.json"
     jsonSchema["$schema"] = "http://json-schema.org/draft/7/schema#"
-    jsonSchema["title"] = "Schema for table: " + tableName
+    jsonSchema["title"] = tableName
+    jsonSchema["description"] = "JSON Schema for Log Analytics table: " + tableName
+    jsonSchema["type"] = "object"
+    jsonSchema["required"] = ["TimeGenerated", "Type"]
+    jsonSchema["properties"] = {}
     
-    jsonSchema = json.dumps(jsonSchema)
 
-    print(jsonSchema)
+    for item in tableDetails:
+        if item['type'] == 'datetime':
+            entry = {'type': 'string', 'format': 'date-time', 'description': item['description']}
+        elif item['type'] == 'int':
+            entry = {'type': 'integer', 'description': item['description']}
+        else:
+            entry = {'type': item['type'], 'description': item['description']}
+
+        jsonSchema['properties'][item['name']] = entry
+    
+    #jsonSchema = json.dumps(jsonSchema)
+
+    return(jsonSchema)
+
+# Write DCR Deployment Templates to file
+def writeSchema(schema):
+   
+    path = 'jsonSchema/'
+    os.makedirs(path, exist_ok=True)
+
+    filename = schema['title'] + '-schema.json'
+    schema = json.dumps(schema)
+
+    with open(path + filename, 'w') as f:
+        f.write(schema)
 
 if __name__ == '__main__':
 
     supportedTables = get_supported_tables(base_url + supportedTablesPath, tablesPath)
-    generateJSONSchema(parseTableDetails(base_url,tablesPath,'syslog'), 'syslog')
 
-
+    for table in supportedTables:
+        schema = generateJSONSchema(parseTableDetails(base_url,tablesPath,table), table)
+        writeSchema(schema)
