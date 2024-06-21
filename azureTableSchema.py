@@ -82,6 +82,12 @@ def generateJSONSchema(tableDetails, tableName):
             entry = {'type': 'string', 'format': 'date-time', 'description': item['description']}
         elif item['type'] == 'int':
             entry = {'type': 'integer', 'description': item['description']}
+        elif item['type'] == 'bool':
+            entry = {'type': 'boolean', 'description': item['description']}
+        elif item['type'] == 'dynamic':
+            entry = {'type': 'string', 'description': item['description']}
+        elif item['type'] == 'real':
+            entry = {'type': 'number', 'description': item['description']}
         else:
             entry = {'type': item['type'], 'description': item['description']}
 
