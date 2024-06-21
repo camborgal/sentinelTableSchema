@@ -69,7 +69,7 @@ def parseTableDetails(base_url,path,table):
 def generateJSONSchema(tableDetails, tableName):
     jsonSchema = {}
     jsonSchema["$id"] = "https://example.com/" + tableName + ".schema.json"
-    jsonSchema["$schema"] = "http://json-schema.org/draft/7/schema#"
+    jsonSchema["$schema"] = "http://json-schema.org/draft-07/schema#"
     jsonSchema["title"] = tableName
     jsonSchema["description"] = "JSON Schema for Log Analytics table: " + tableName
     jsonSchema["type"] = "object"
