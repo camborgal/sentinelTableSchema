@@ -68,19 +68,20 @@ def parseTableDetails(base_url,path,table):
 # Function to generate JSON schema format
 def generateJSONSchema(tableDetails, tableName):
     jsonSchema = {}
-    jsonSchema["$id"] = "https://example.com/" + tableName + ".schema.json"
+    jsonSchema["$id"] = "https://example.com/schema/" + tableName + ".json"
     jsonSchema["$schema"] = "http://json-schema.org/draft-07/schema#"
     jsonSchema["title"] = tableName
     jsonSchema["description"] = "JSON Schema for Log Analytics table: " + tableName
     jsonSchema["type"] = "object"
     jsonSchema["required"] = ["TimeGenerated", "Type"]
+    jsonSchema["$defs"] = {"time": {"anyOf": [{"type": "string", "format": "date-time"}, {"type": "string", "pattern": "\\d{10,13}(\\.\\d{1,3})?"}]}}
     jsonSchema["properties"] = {}
     
 
     for item in tableDetails:
         if item['type'] == 'datetime':
-            entry = {'type': 'string', 'format': 'date-time', 'description': item['description']}
-        elif item['type'] == 'int':
+            entry = {'$ref': '#/$defs/time', 'description': item['description']}
+        elif item['type'] == 'int' or item['type'] == 'long':
             entry = {'type': 'integer', 'description': item['description']}
         elif item['type'] == 'bool':
             entry = {'type': 'boolean', 'description': item['description']}
@@ -92,8 +93,6 @@ def generateJSONSchema(tableDetails, tableName):
             entry = {'type': item['type'], 'description': item['description']}
 
         jsonSchema['properties'][item['name']] = entry
-    
-    #jsonSchema = json.dumps(jsonSchema)
 
     return(jsonSchema)
 
