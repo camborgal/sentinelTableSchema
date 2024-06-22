@@ -79,6 +79,7 @@ def generateJSONSchema(tableDetails, tableName):
     
 
     for item in tableDetails:
+
         if item['type'] == 'datetime':
             entry = {'$ref': '#/$defs/time', 'description': item['description']}
         elif item['type'] == 'int' or item['type'] == 'long':
@@ -89,6 +90,8 @@ def generateJSONSchema(tableDetails, tableName):
             entry = {'type': 'string', 'description': item['description']}
         elif item['type'] == 'real':
             entry = {'type': 'number', 'description': item['description']}
+        elif item['name'] == 'Type':
+            entry = {'type': item['type'], 'description': item['description'], 'enum': [tableName]}
         else:
             entry = {'type': item['type'], 'description': item['description']}
 
@@ -111,6 +114,8 @@ def writeSchema(schema):
 if __name__ == '__main__':
 
     supportedTables = get_supported_tables(base_url + supportedTablesPath, tablesPath)
+
+    #schema = generateJSONSchema(parseTableDetails(base_url,tablesPath,"Syslog"), "Syslog")
 
     for table in supportedTables:
         schema = generateJSONSchema(parseTableDetails(base_url,tablesPath,table), table)
