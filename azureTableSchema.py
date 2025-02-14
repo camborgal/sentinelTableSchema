@@ -74,7 +74,7 @@ def generateJSONSchema(tableDetails, tableName):
     jsonSchema["description"] = "JSON Schema for Log Analytics table: " + tableName
     jsonSchema["type"] = "object"
     jsonSchema["required"] = ["TimeGenerated", "Type"]
-    jsonSchema["$defs"] = {"time": {"anyOf": [{"type": "string", "format": "date-time"}, {"type": "string", "pattern": "\\d{10,13}(\\.\\d{1,3})?"}]}}
+    jsonSchema["$defs"] = {"time": {"anyOf": [{"type": "string", "format": "date-time"}, {"type": "string", "pattern": "\\d{10}\\.?\\d{0,3}?"}]}}
     jsonSchema["properties"] = {}
     
 

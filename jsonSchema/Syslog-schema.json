@@ -1,1 +1,82 @@
-{"$id": "https://example.com/schema/Syslog.json", "$schema": "http://json-schema.org/draft-07/schema#", "title": "Syslog", "description": "JSON Schema for Log Analytics table: Syslog", "type": "object", "required": ["TimeGenerated", "Type"], "$defs": {"time": {"anyOf": [{"type": "string", "format": "date-time"}, {"type": "string", "pattern": "\\d{10,13}(\\.\\d{1,3})?"}]}}, "properties": {"CollectorHostName": {"type": "string", "description": "Name of the remote device that generated the message."}, "Computer": {"type": "string", "description": "Computer that the event was collected from."}, "EventTime": {"$ref": "#/$defs/time", "description": "Date and time that the event was generated."}, "Facility": {"type": "string", "description": "The part of the system that generated the message."}, "HostIP": {"type": "string", "description": "IP address of the system sending the message."}, "HostName": {"type": "string", "description": "Name of the system sending the message."}, "ProcessID": {"type": "integer", "description": "ID of the process that generated the message."}, "ProcessName": {"type": "string", "description": "Name of the process that generated the message."}, "SeverityLevel": {"type": "string", "description": "Severity level of the event."}, "SourceSystem": {"type": "string", "description": "The type of agent the event was collected by. For example, OpsManager for Windows agent, either direct connect or Operations Manager, Linux for all Linux agents, or Azure for Azure Diagnostics"}, "SyslogMessage": {"type": "string", "description": "Text of the message."}, "TimeGenerated": {"$ref": "#/$defs/time", "description": "Date and time the record was created."}, "Type": {"type": "string", "description": "The name of the table", "enum": ["Syslog"]}}}
+{
+    "$id": "https://example.com/schema/Syslog.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Syslog",
+    "description": "JSON Schema for Log Analytics table: Syslog",
+    "type": "object",
+    "required": [
+        "TimeGenerated",
+        "Type"
+    ],
+    "$defs": {
+        "time": {
+            "anyOf": [
+                {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                {
+                    "type": "string",
+                    "pattern": "\\d{10}\\.?\\d{0,3}?"
+                }
+            ]
+        }
+    },
+    "properties": {
+        "CollectorHostName": {
+            "type": "string",
+            "description": "Name of the remote device that generated the message."
+        },
+        "Computer": {
+            "type": "string",
+            "description": "Computer that the event was collected from."
+        },
+        "EventTime": {
+            "$ref": "#/$defs/time",
+            "description": "Date and time that the event was generated."
+        },
+        "Facility": {
+            "type": "string",
+            "description": "The part of the system that generated the message."
+        },
+        "HostIP": {
+            "type": "string",
+            "description": "IP address of the system sending the message."
+        },
+        "HostName": {
+            "type": "string",
+            "description": "Name of the system sending the message."
+        },
+        "ProcessID": {
+            "type": "integer",
+            "description": "ID of the process that generated the message."
+        },
+        "ProcessName": {
+            "type": "string",
+            "description": "Name of the process that generated the message."
+        },
+        "SeverityLevel": {
+            "type": "string",
+            "description": "Severity level of the event."
+        },
+        "SourceSystem": {
+            "type": "string",
+            "description": "The type of agent the event was collected by. For example, OpsManager for Windows agent, either direct connect or Operations Manager, Linux for all Linux agents, or Azure for Azure Diagnostics"
+        },
+        "SyslogMessage": {
+            "type": "string",
+            "description": "Text of the message."
+        },
+        "TimeGenerated": {
+            "$ref": "#/$defs/time",
+            "description": "Date and time the record was created."
+        },
+        "Type": {
+            "type": "string",
+            "description": "The name of the table",
+            "enum": [
+                "Syslog"
+            ]
+        }
+    }
+}
